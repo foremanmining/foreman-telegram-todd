@@ -3,7 +3,7 @@ package mn.foreman.telegrambot.bot;
 import mn.foreman.api.ForemanApi;
 import mn.foreman.api.ForemanApiImpl;
 import mn.foreman.api.JdkWebUtil;
-import mn.foreman.api.notifications.Notifications;
+import mn.foreman.api.endpoints.notifications.Notifications;
 import mn.foreman.telegrambot.db.session.ChatSession;
 import mn.foreman.telegrambot.db.session.SessionRepository;
 

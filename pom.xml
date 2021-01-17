@@ -35,7 +35,7 @@
 
     <properties>
         <emoji.version>5.1.1</emoji.version>
-        <foreman.version>3.39.0-SNAPSHOT</foreman.version>
+        <foreman.version>1.0.0</foreman.version>
         <jib.version>1.8.0</jib.version>
         <lombok.version>1.18.16</lombok.version>
         <telegram-bots.version>5.0.1</telegram-bots.version>
@@ -46,7 +46,7 @@
     <dependencies>
         <dependency>
             <groupId>mn.foreman</groupId>
-            <artifactId>foreman-api</artifactId>
+            <artifactId>java-api</artifactId>
             <version>${foreman.version}</version>
         </dependency>
 

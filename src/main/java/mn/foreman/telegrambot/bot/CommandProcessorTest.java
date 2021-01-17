@@ -1,7 +1,7 @@
 package mn.foreman.telegrambot.bot;
 
 import mn.foreman.api.ForemanApi;
-import mn.foreman.api.ping.Ping;
+import mn.foreman.api.endpoints.ping.Ping;
 import mn.foreman.telegrambot.db.session.ChatSession;
 import mn.foreman.telegrambot.db.session.SessionRepository;
 import mn.foreman.telegrambot.utils.ForemanUtils;
