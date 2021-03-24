@@ -43,11 +43,20 @@ public class CallbackProcessorDoneStart
             chatSession.setSessionState(SessionState.WAITING_CLIENT_ID);
             this.sessionRepository.save(chatSession);
 
-            callback.accept(
-                    MessageUtils.withReplyMarkup(
-                            new ForceReplyKeyboard(true),
-                            chatId,
-                            "Great! Now enter your client ID"));
+            if (chatId.contains("-")) {
+                // Channel
+                callback.accept(
+                        MessageUtils.simpleMessage(
+                                chatId,
+                                "Great! Now give me those by typing:\n\n`/register <client_id> <api_key>`"));
+            } else {
+                // DM
+                callback.accept(
+                        MessageUtils.withReplyMarkup(
+                                new ForceReplyKeyboard(true),
+                                chatId,
+                                "Great! Now enter your client ID"));
+            }
         } else {
             callback.accept(MessageUtils.startOver(chatId));
         }

@@ -10,6 +10,9 @@ public enum Command {
     /** Start bot setup. */
     START("/start"),
 
+    /** Channel registration. */
+    REGISTER("/register"),
+
     /** Test bot connectivity. */
     TEST("/test");
 

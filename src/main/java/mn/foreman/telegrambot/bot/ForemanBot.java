@@ -113,8 +113,14 @@ public class ForemanBot
 
     @Override
     public void onUpdateReceived(final Update update) {
-        if (update.hasMessage()) {
-            final Message message = update.getMessage();
+        if (update.hasMessage() || update.hasChannelPost()) {
+            final Message message;
+            if (update.hasMessage()) {
+                message = update.getMessage();
+            } else {
+                message = update.getChannelPost();
+            }
+
             if (message.hasText()) {
                 handleMessage(message);
             }
