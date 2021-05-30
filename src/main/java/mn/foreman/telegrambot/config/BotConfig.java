@@ -66,6 +66,10 @@ public class BotConfig {
                         new CommandProcessorRegister(
                                 sessionRepository,
                                 foremanBaseUrl))
+                .put(
+                        Command.FORGET,
+                        new CommandProcessorForget(
+                                sessionRepository))
                 .build();
     }
 

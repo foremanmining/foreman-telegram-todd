@@ -13,6 +13,9 @@ public enum Command {
     /** Channel registration. */
     REGISTER("/register"),
 
+    /** Stop bot interactions. */
+    FORGET("/forget"),
+
     /** Test bot connectivity. */
     TEST("/test");
 
