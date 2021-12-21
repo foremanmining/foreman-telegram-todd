@@ -38,7 +38,7 @@
         <foreman.version>1.0.0</foreman.version>
         <jib.version>1.8.0</jib.version>
         <lombok.version>1.18.16</lombok.version>
-        <telegram-bots.version>5.0.1</telegram-bots.version>
+        <telegram-bots.version>5.5.0</telegram-bots.version>
 
         <java.version>11</java.version>
     </properties>
