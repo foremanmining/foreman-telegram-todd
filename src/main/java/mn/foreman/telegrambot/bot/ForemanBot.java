@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,9 @@ public class ForemanBot
     /** The processor. */
     private final Map<Command, CommandProcessor> commandProcessors;
 
+    /** The full username. */
+    private final String fullUsername;
+
     /** The processor for notifications. */
     private final NotificationsProcessor notificationsProcessor;
 
@@ -55,6 +59,7 @@ public class ForemanBot
      * Constructor.
      *
      * @param username               The username.
+     * @param fullUsername           The full username.
      * @param token                  The token.
      * @param sessionRepository      The session repository.
      * @param commandProcessors      The command processors.
@@ -65,6 +70,7 @@ public class ForemanBot
     @Autowired
     public ForemanBot(
             @Value("${bot.username}") final String username,
+            @Value("${bot.fullUsername}") final String fullUsername,
             @Value("${bot.token}") final String token,
             final SessionRepository sessionRepository,
             final Map<Command, CommandProcessor> commandProcessors,
@@ -72,6 +78,7 @@ public class ForemanBot
             final NotificationsProcessor notificationsProcessor,
             final Map<SessionState, ReplyProcessor> replyProcessors) {
         this.username = username;
+        this.fullUsername = fullUsername;
         this.token = token;
         this.sessionRepository = sessionRepository;
         this.commandProcessors = new HashMap<>(commandProcessors);
@@ -191,6 +198,7 @@ public class ForemanBot
      */
     private void handleMessage(final Message message) {
         final String text = message.getText();
+        LOG.debug("Received: {}", text);
         final String chatId = message.getChatId().toString();
         final Optional<Command> command = Command.forText(text);
         if (command.isPresent()) {
@@ -198,23 +206,27 @@ public class ForemanBot
                     message,
                     command.get());
         } else if (message.isReply()) {
-            final Optional<ChatSession> chatSessionOpt =
-                    this.sessionRepository.findById(chatId);
-            if (chatSessionOpt.isPresent()) {
-                final ChatSession chatSession =
-                        chatSessionOpt.get();
-                final SessionState sessionState =
-                        chatSession.getSessionState();
-                final ReplyProcessor replyProcessor =
-                        this.replyProcessors.getOrDefault(
-                                sessionState,
-                                new ReplyProcessorNull());
-                replyProcessor.processReply(
-                        message,
-                        this::sendMessage);
-            } else {
-                // Out of sync
-                sendMessage(MessageUtils.startOver(chatId));
+            final Message replyToMessage = message.getReplyToMessage();
+            final User from = replyToMessage.getFrom();
+            if (this.fullUsername.equals(from.getUserName())) {
+                final Optional<ChatSession> chatSessionOpt =
+                        this.sessionRepository.findById(chatId);
+                if (chatSessionOpt.isPresent()) {
+                    final ChatSession chatSession =
+                            chatSessionOpt.get();
+                    final SessionState sessionState =
+                            chatSession.getSessionState();
+                    final ReplyProcessor replyProcessor =
+                            this.replyProcessors.getOrDefault(
+                                    sessionState,
+                                    new ReplyProcessorNull());
+                    replyProcessor.processReply(
+                            message,
+                            this::sendMessage);
+                } else {
+                    // Out of sync
+                    sendMessage(MessageUtils.startOver(chatId));
+                }
             }
         }
     }

@@ -44,11 +44,15 @@ public enum Command {
     /**
      * Returns the command related to the text.
      *
-     * @param text The text.
+     * @param original The text.
      *
      * @return The command.
      */
-    public static Optional<Command> forText(final String text) {
+    public static Optional<Command> forText(final String original) {
+        String text = original;
+        if (original.contains("@")) {
+            text = original.split("@")[0];
+        }
         final String[] regions = text.split(" ");
         if (regions.length > 0) {
             return Optional.ofNullable(VALUES.get(regions[0]));

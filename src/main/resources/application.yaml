@@ -1,6 +1,7 @@
 bot:
   token: fill_me_in
   username: Todd
+  fullUsername: ForemanToddBot
   check:
     initialDelay: 60000
     fixedDelay: 60000
